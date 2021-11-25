@@ -1,0 +1,45 @@
+//
+//  ManageRestaurantModel.swift
+//  iosFinalAssignment
+//
+//  Created by TENZIN TSELHA on 10/22/21.
+//https://api.nutritionix.com/v1_1/search/Tibetan?&appId=8d4efacc&appKey=81f5d916c7463970a0e4ee06d031587c
+import UIKit
+class ManageRestaurantModel {
+    static var shared = ManageRestaurantModel()
+    private init() {}
+    let apikey = "8d4efacc"
+    let apiId = "81f5d916c7463970a0e4ee06d031587c"
+    var numRows : Int = 0
+    var okay = [Business]()
+    var results = [String:String]()
+    var task : URLSessionDataTask?
+    var decodedResult = [result]()
+    func fetchData(term: String, completion: @escaping (result?)-> Void) {
+        print("7. entered fetchdata")
+        let urlString = "https://api.nutritionix.com/v1_1/search/\(term)?&zip=20005&appId=\(apikey)&appKey=\(apiId)"
+        print("8. printing url \(urlString)")
+        if let url = URL.init(string: urlString){
+            task?.cancel()
+            task = URLSession.shared.dataTask(with:url) { (data,response,error) in
+                print("9. URLSession turned on ")
+                if let error = error {
+                    print(error)
+                }else if let data = data{
+                    guard let decodedResult = try? JSONDecoder().decode(result.self, from: data) else {return}
+                        print("9. checking itemName \(decodedResult.hits[2].item.itemName!)")
+                        print("10. resultOBJ \(decodedResult)")
+                    print("11. count \(decodedResult.hits.count)")
+                    print("12. \(decodedResult.hits[0].item.itemName!)")
+                    }
+                }
+            task?.resume()
+    }
+}
+}
+
+
+                                                  
+                                
+
+                
